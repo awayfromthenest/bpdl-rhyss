@@ -144,24 +144,26 @@
 	            result      = template(projectData);
 			        $('#portfolio').html(result);
 	    };
-	    if(sessionStorage.getItem('behanceProject')) {
-	        setPortfolioTemplate();
-	    } else {
-	        $.getJSON(behanceProjectAPI, function(project) {
-	            var data = JSON.stringify(project);
-	            sessionStorage.setItem('behanceProject', data);
-	            setPortfolioTemplate();
-	        });
-	    };
-	
 			function setProjectTemplate() {
 	        var projectData = JSON.parse(sessionStorage.getItem('behanceProject')),
 	            getTemplate = $('#project-template').html(),
 	            template    = Handlebars.compile(getTemplate),
 	            result      = template(projectData);
 			        $('#project').html(result);
+							$('#project').hide();
 	    };
-			
+	    if(sessionStorage.getItem('behanceProject')) {
+	        setPortfolioTemplate();
+					setProjectTemplate();
+	    } else {
+	        $.getJSON(behanceProjectAPI, function(project) {
+	            var data = JSON.stringify(project);
+	            sessionStorage.setItem('behanceProject', data);
+	            setPortfolioTemplate();
+							setProjectTemplate(); 
+	        });
+	    };
+		
 	
 	
 			$('#portfolio').on('click', '.portfolio-cover', function() {
@@ -172,10 +174,9 @@
 							projectName = $this.data('project-name');
 							// alert(projectName);
 			    		function showGallery(dataSource) {
-									$('#project').append(dataSource);
 							    $this.magnificPopup({
 							        items: 
-							{	dataSource, src:beProjectContentAPI},
+							{	src:beProjectContentAPI },
 							        gallery: {
 							            enabled: true
 							        },
@@ -183,6 +184,7 @@
 							        mainClass: 'animated',
 							        removalDelay: 350
 							    }).magnificPopup('open');
+							$('#project').show();
 							};
 							// function showGallery(dataSource) {  
 			    		// 			    									    $this.magnificPopup({
@@ -264,8 +266,32 @@
 
 <!-- ******************************************* END HEADER ****************************************************** -->
 
-<div id="project-template">
-<div id="project">BAP</div>
+<div id="project">
+	<script id="project-template" type="text/x-handlebars-template">
+		{{#each projects}}
+			{{this.url}}
+			<img src="{{this.covers.[115]}}" >
+			{{this.stats.[views]}}
+			{{this.tags.[description]}}
+			{{this.owners.[0].id}}
+			{{this.owners.[0].first_name}}
+			{{this.description.[0]}}
+			{{this.tags}}
+			
+			{{#each owners}}
+				{{this.id}}
+				{{this.first_name}}
+				{{this.company}}
+				<a href="{{this.url}}">{{this.url}}</a>
+				<img src="{{this.images.[50]}}">
+				{{this.fields}}
+				<a href="{{this.website}}">{{this.website}}</a>
+			{{/each}}
+			
+		{{/each}}
+		
+		
+	</script>
 </div>
 
 <!-- *************************************** PORTFOLIO ********************************************************** -->
