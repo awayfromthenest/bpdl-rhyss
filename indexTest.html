@@ -154,6 +154,24 @@
 	        });
 	    };
 	
+			function setProjectTemplate() {
+	        var projectData = JSON.parse(sessionStorage.getItem('behanceProject')),
+	            getTemplate = $('#project-template').html(),
+	            template    = Handlebars.compile(getTemplate),
+	            result      = template(projectData);
+			        $('#project').html(result);
+	    };
+			$('#project').append(newProjectHtml);
+	    if(sessionStorage.getItem('behanceProject')) {
+	        setProjectTemplate();
+	    } else {
+	        $.getJSON(behanceProjectAPI, function(project) {
+	            var data = JSON.stringify(project);
+	            sessionStorage.setItem('behanceProject', data);
+	            setProjectTemplate();
+	        });
+	    };
+	
 	
 			$('#portfolio').on('click', '.portfolio-cover', function() {			
 			    var $this = $(this),
@@ -163,35 +181,13 @@
 			    		function showGallery(dataSource) {
 							    $this.magnificPopup({
 							        items: {
-											    src: beProjectContentAPI,
-											  },
-											  type: 'iframe',
+												src: "project.html"
+										  },
+										  type: 'gallery',
 							        mainClass: 'animated',
 							        removalDelay: 350
 							    }).magnificPopup('open');
 							};
-							
-							function setProjectTemplate() {
-					        var projectData = JSON.parse(sessionStorage.getItem('behanceProject')),
-					            getTemplate = $('#project-template').html(),
-					            template    = Handlebars.compile(getTemplate),
-					            result      = template(projectData);
-							        $('#project').html(result);
-					    };
-							$('pre').attr("id","projectMAN");
-							alert('something');							
-							newProjectHtml = "BLAH BLAH BLAH"
-							$('#project').append(newProjectHtml);
-					    if(sessionStorage.getItem('behanceProject')) {
-					        setProjectTemplate();
-					    } else {
-					        $.getJSON(behanceProjectAPI, function(project) {
-					            var data = JSON.stringify(project);
-					            sessionStorage.setItem('behanceProject', data);
-					            setProjectTemplate();
-					        });
-					    };
-							
 			    if(localStorage.getItem(keyName)) {
 			        var srcItems = JSON.parse(localStorage.getItem(keyName));
 			        showGallery(srcItems);
@@ -263,6 +259,10 @@
 </div>
 
 <!-- ******************************************* END HEADER ****************************************************** -->
+<div id="project-template">
+<div id="project">BAP</div>
+</div>
+
 <!-- *************************************** PORTFOLIO ********************************************************** -->
 <div class="section portfolio" id="portfolioanchor">
 	<div class="row">

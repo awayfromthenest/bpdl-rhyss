@@ -154,20 +154,32 @@
 	        });
 	    };
 	
+			function setProjectTemplate() {
+	        var projectData = JSON.parse(sessionStorage.getItem('behanceProject')),
+	            getTemplate = $('#project-template').html(),
+	            template    = Handlebars.compile(getTemplate),
+	            result      = template(projectData);
+			        $('#project').html(result);
+	    };
+			
+	
+	
 			$('#portfolio').on('click', '.portfolio-cover', function() {
 			    var $this = $(this),
 			        projectID = $this.data('project-id'),
 			        beProjectContentAPI = 'http://www.behance.net/v2/projects/'+ projectID +'?callback=?&api_key=' + apiKey,
 			        keyName = 'behanceProjectImages-' + projectID;
 							projectName = $this.data('project-name');
-							alert(projectName);
+							// alert(projectName);
 			    		function showGallery(dataSource) {
+									$('#project').append(dataSource);
 							    $this.magnificPopup({
-							        items: dataSource,
+							        items: 
+							{	dataSource, src:beProjectContentAPI},
 							        gallery: {
 							            enabled: true
 							        },
-							        type: 'image',
+							        type: 'iframe',
 							        mainClass: 'animated',
 							        removalDelay: 350
 							    }).magnificPopup('open');
@@ -251,6 +263,11 @@
 </div>
 
 <!-- ******************************************* END HEADER ****************************************************** -->
+
+<div id="project-template">
+<div id="project">BAP</div>
+</div>
+
 <!-- *************************************** PORTFOLIO ********************************************************** -->
 <div class="section portfolio" id="portfolioanchor">
 	<div class="row">
