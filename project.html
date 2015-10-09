@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>BP Design Lab - Portfolio of Brent Pantell</title>
+  <meta name="description" content="BP Design Lab is the professional graphic design portfolio of Brent Pantell.">
+  <meta name="author" content="Brent Pantell">
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
+	
+	<!-- Magnific Popup core CSS file -->
+	<link rel="stylesheet" href="dist/magnific-popup.css"> 
+	<!-- jQuery 1.7.2+ or Zepto.js 1.0+ -->
+	<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+	<!-- Magnific Popup core JS file -->
+	<!--<script src="dist/jquery.magnific-popup.min.js"></script> -->
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	
+	<!-- Javascript to Include
+	-------------------------------------------------- -->
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/0.9.9/jquery.magnific-popup.min.js"></script>
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/manifest.json">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+	
+			<script type="text/javascript">	
+	$(document).ready(function() {
+		/* Smooth Scrolling */
+		var hashTagActive = "";
+	    $(".scroll").click(function (event) {
+	        if(hashTagActive != this.hash) { //this will prevent if the user click several times the same link to freeze the scroll.
+	            event.preventDefault();
+	            //calculate destination place
+	            var dest = 0;
+	            if ($(this.hash).offset().top > $(document).height() - $(window).height()) {
+	                dest = $(document).height() - $(window).height();
+	            } else {
+	                dest = $(this.hash).offset().top;
+	            }
+	            //go to destination
+	            $('html,body').animate({
+	                scrollTop: dest
+	            }, 2000, 'swing');
+	            hashTagActive = this.hash;
+	        }
+	    });/* END Smooth Scrolling */
+	
+	 	// http://www.behance.net/v2/users/bpdesignlab?callback=?&api_key=z7aLfU1qCXrnXE3OwnudTaJxGcBuIPXo
+		// http://www.behance.net/v2/users/bpdesignlab/projects?callback=?&api_key=z7aLfU1qCXrnXE3OwnudTaJxGcBuIPXo
+		var apiKey  = 'z7aLfU1qCXrnXE3OwnudTaJxGcBuIPXo';
+		var userID  = 'bpdesignlab';	
+	    var behanceUserAPI = 'http://www.behance.net/v2/users/'+ userID +'?callback=?&api_key='+ apiKey;
+				
+	    function setUserTemplate() {
+	        var userData    = JSON.parse(sessionStorage.getItem('behanceUser')),
+	        getTemplate = $('#profile-template').html(),
+	        template    = Handlebars.compile(getTemplate),
+	        result      = template(userData);
+	        $('#header').html(result);
+	    };
+	    if(sessionStorage.getItem('behanceUser')) {
+	        setUserTemplate();
+	    } else {
+	        $.getJSON(behanceUserAPI, function(user) {
+	            var data = JSON.stringify(user);
+	            sessionStorage.setItem('behanceUser', data);
+	            setUserTemplate();
+	        });
+	    };
+		
+		function setSocialTemplate() {
+	        var socialData    = JSON.parse(sessionStorage.getItem('behanceSocial')),
+	        getTemplate = $('#social-template').html(),
+	        template    = Handlebars.compile(getTemplate),
+	        result      = template(socialData);
+	        $('#social').html(result);
+					if($('a[title="Flickr"]')) {
+						$('a[title="Flickr"]').html("<div class='btn_flickr'>&nbsp;</div>");
+					};
+					if($('a[title="LinkedIn"]')) {
+						$('a[title="LinkedIn"]').html("<div class='btn_linkedin'></div>");
+					};
+					if($('a[title="Instagram"]')) {
+						$('a[title="Instagram"]').html("<div class='btn_instagram'></div>");
+					};
+					if($('a[title="Facebook"]')) {
+						$('a[title="Facebook"]').html("<div class='btn_fb'></div>");
+					};
+					if($('a[title="Twitter"]')) {
+						$('a[title="Twitter"]').html("<div class='btn_twitter'></div>");
+					};
+					if($('a[title="Behance"]')) {
+						$('a[title="Behance"]').html("<div class='btn_behance'></div>");
+					};
+	
+	    };
+	    if(sessionStorage.getItem('behanceSocial')) {
+	        setSocialTemplate();
+	    } else {
+	        $.getJSON(behanceUserAPI, function(user) {
+	            var data = JSON.stringify(user);
+	            sessionStorage.setItem('behanceSocial', data);
+	            setSocialTemplate();
+	        });
+	    };
+			
+	
+		var perPage = 20;
+	    var behanceProjectAPI = 'http://www.behance.net/v2/users/'+ userID +'/projects?callback=?&api_key=' + apiKey + '&per_page=' + perPage;
+	    function setPortfolioTemplate() {
+	        var projectData = JSON.parse(sessionStorage.getItem('behanceProject')),
+	            getTemplate = $('#portfolio-template').html(),
+	            template    = Handlebars.compile(getTemplate),
+	            result      = template(projectData);
+			        $('#portfolio').html(result);
+	    };
+	    if(sessionStorage.getItem('behanceProject')) {
+	        setPortfolioTemplate();
+	    } else {
+	        $.getJSON(behanceProjectAPI, function(project) {
+	            var data = JSON.stringify(project);
+	            sessionStorage.setItem('behanceProject', data);
+	            setPortfolioTemplate();
+	        });
+	    };
+	
+			$('#portfolio').on('click', '.portfolio-cover', function() {
+			    var $this = $(this),
+			        projectID = $this.data('project-id'),
+			        beProjectContentAPI = 'http://www.behance.net/v2/projects/'+ projectID +'?callback=?&api_key=' + apiKey,
+			        keyName = 'behanceProjectImages-' + projectID;
+							projectName = $this.data('project-name');
+							alert(projectName);
+			    		function showGallery(dataSource) {
+							    $this.magnificPopup({
+							        items: dataSource,
+							        gallery: {
+							            enabled: true
+							        },
+							        type: 'image',
+							        mainClass: 'animated',
+							        removalDelay: 350
+							    }).magnificPopup('open');
+							};
+							// function showGallery(dataSource) {  
+			    		// 			    									    $this.magnificPopup({
+			    		// 			    									        items: dataSource,
+			    		// 			    									        gallery: {
+			    		// 			    									            enabled: true
+			    		// 			    									        },
+			    		// 			    									        type: 'image',
+			    		// 			    									        mainClass: 'animated',
+			    		// 			    									        removalDelay: 350
+			    		// 			    									    }).magnificPopup('open');
+			    		// 			    									};
+			    if(localStorage.getItem(keyName)) {
+			        var srcItems = JSON.parse(localStorage.getItem(keyName));
+			        showGallery(srcItems);
+			    } else {
+			        $.getJSON(beProjectContentAPI, function(projectContent) {
+			            var src = [];
+			            $.each(projectContent.project.modules, function(index, mod) {
+			                if(mod.src != undefined) {
+			                    src.push({ src: mod.src }); 
+			                }
+			            });
+			            showGallery(src);
+			            var data = JSON.stringify(src);
+			            localStorage.setItem(keyName, data);
+			        });
+			    };
+					
+					
+					// ---------------\
+					Handlebars.registerHelper('list', function(items, options) {
+					  var out = "<ul>";
+
+					  for(var i=0, l=items.length; i<l; i++) {
+					    out = out + "<li>" + options.fn(items[i]) + "</li>";
+					  }
+
+					  return out + "</ul>";
+					});
+					
+			});		
+				
+			
+	});				
+	
+
+			</script>
+			
+</head>
+<body>
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<!-- ************************************** HEADER *********************************************************** -->
+<div class="section header">
+  <div class="container">
+    <div class="row">
+			
+      <div class="twelve columns" style="margin-top: 8%">
+				<header id="header" class="portfolio-header clearfix">
+					<script id="profile-template" type="text/x-handlebars-template">
+						<div class="five columns" style="text-align:left;">
+								<img src="images/img_bpdlLogo.png" class="siteLogo" />
+						</div>
+						<div class="five columns navigation floatRight" style="clear:right;">
+						<div style="text-align:right;"><a class="scroll" href="#aboutmeanchor">ABOUT ME</a> &nbsp; <a class="scroll" href="#portfolioanchor">PORTFOLIO</a> &nbsp; <a class="scroll" href="#getintouchanchor">GET IN TOUCH</div>
+						</div>
+										<div class="clearer">&nbsp;</div>														
+				
+				</script>
+				</header>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mainBanner">
+		<!--<img src="images/img_elbrent.jpg" style="text-align:center; width:100%; height:auto;" /> -->
+</div>
+
+<!-- ******************************************* END HEADER ****************************************************** -->
+<!-- *************************************** PORTFOLIO ********************************************************** -->
+<div class="section portfolio" id="portfolioanchor">
+	<div class="row">
+		<div id="content" class="content-area clearfix">
+			
+            <div id="portfolio" class="portfolio-area clearfix">      
+		    <script id="portfolio-template" type="text/x-handlebars-template">
+				<div class="textContent">
+						<h6 style="text-align:center;">PORTFOLIO</h2>
+					<hr>
+				</div>
+				
+		    <ul class="portfolio-list clearfix">
+		        {{#each projects}}
+			        <li class="portfolio-item">
+					{{id}}
+						<div class="portfolio-content">
+			    <figure class="portfolio-cover" title="{{this.name}}" data-project-id="{{this.id}}">
+			        {{#if this.covers.[404]}}
+			        <img class="portfolio-image" src="{{this.covers.[404]}}" alt="">
+			        {{else}}
+			            {{#if this.covers.[230]}}
+			            <img class="portfolio-image" src="{{this.covers.[230]}}" alt="">
+			            {{else}}
+			            <img class="portfolio-image" src="{{this.covers.[202]}}" alt="">
+			            {{/if}}
+			        {{/if}}
+			    </figure>
+			    <div class="portfolio-fields">
+			<h2 class="portfolio-title">{{this.name}}</h2>
+			        <ul class="field-list">
+			        {{#each this.fields}}
+			            <li class="field-item">{{this}}</li>
+			        {{/each}}
+			        </ul>
+			    </div>
+			</div> 
+					</li>
+			        {{/each}}
+		    </ul>
+			
+			
+			
+		    </script>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- ******************************************* end portfolio ****************************************************** -->
+<!-- ********************************* FOOTER **************************************************************** -->
+<footer id="footer" class="portfolio-footer clearfix">	
+        <h6 style="text-align:center;" id="getintouchanchor">GET IN TOUCH</h6></div>
+    <div class="textContent">
+        <hr>
+    </div>  
+        
+        <div id="social">
+            <script id="social-template" type="text/x-handlebars-template">
+            <ul id="socialMedia">
+                    <li class="socialIcon"><a href="https://www.behance.net/bpdesignlab" target="_blank" title="Behance">Behance</a></li>
+                {{#each user.social_links}}
+                    <li class="socialIcon"><a class="socialLink" href="{{this.url}}" title="{{this.service_name}}" target="_blank">{{this.service_name}}</a>
+                {{/each}}
+										<li class="socialIcon"><a href="https://instagram.com/bpantell/" target="_blank" title="Instagram">Instagram</a></li>
+            </ul>
+            </script>
+        </div>    
+
+        <div class="clearfix" style="clear:both;">&nbsp;</div>
+<div class="textContent last"><hr></div>
+        <div id="power" class="power-by">
+            <p>A BP Design Lab creation.<br />
+                    Copyright &copy; 2015. All rights reserved.<br />
+										Drop me a line by <a href="mailto:bpantell@gmail.com">email</a>.
+						</p>
+        </div>    
+</footer>
+<!-- ******************************************** end footer ***************************************************** -->
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
