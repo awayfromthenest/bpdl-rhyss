@@ -149,7 +149,7 @@
 	            getTemplate = $('#project-template').html(),
 	            template    = Handlebars.compile(getTemplate),
 	            result      = template(projectData);
-			        $('#project').html(result);
+			        $('#project').html(result);			
 							$('#project').hide();
 	    };
 	    if(sessionStorage.getItem('behanceProject')) {
@@ -185,6 +185,7 @@
 							        removalDelay: 350
 							    }).magnificPopup('open');
 							$('#project').show();
+							document.getElementById("#project").innerHTML = srcItems.projects[id].name + "SUCCESS";
 							};
 							// function showGallery(dataSource) {  
 			    		// 			    									    $this.magnificPopup({
@@ -198,7 +199,7 @@
 			    		// 			    									    }).magnificPopup('open');
 			    		// 			    									};
 			    if(localStorage.getItem(keyName)) {
-			        var srcItems = JSON.parse(localStorage.getItem(keyName));
+							var srcItems = JSON.parse(localStorage.getItem(keyName));
 			        showGallery(srcItems);
 			    } else {
 			        $.getJSON(beProjectContentAPI, function(projectContent) {
@@ -218,16 +219,16 @@
 					// ---------------\
 					Handlebars.registerHelper('list', function(items, options) {
 					  var out = "<ul>";
-
 					  for(var i=0, l=items.length; i<l; i++) {
 					    out = out + "<li>" + options.fn(items[i]) + "</li>";
 					  }
-
 					  return out + "</ul>";
 					});
-					
 			});		
 				
+				Handlebars.registerHelper('with', function(context, options) {
+				  return options.fn(context);
+				});
 			
 	});				
 	
@@ -268,17 +269,23 @@
 
 <div id="project">
 	<script id="project-template" type="text/x-handlebars-template">
+		
 		{{#each projects}}
+		PROJECTS:
 			{{this.url}}
 			<img src="{{this.covers.[115]}}" >
-			{{this.stats.[views]}}
-			{{this.tags.[description]}}
+			{{stats.[views]}}
+			{{this.fields}}
+			<img src="{{covers.[115]}}" />
+			{{{this.tags}}}
 			{{this.owners.[0].id}}
 			{{this.owners.[0].first_name}}
-			{{this.description.[0]}}
-			{{this.tags}}
+			{{this.modules.[0].id}}
+			
+
 			
 			{{#each owners}}
+			OWNERS:
 				{{this.id}}
 				{{this.first_name}}
 				{{this.company}}
@@ -288,7 +295,13 @@
 				<a href="{{this.website}}">{{this.website}}</a>
 			{{/each}}
 			
+			
 		{{/each}}
+
+		{{#with projects}}
+		WITH:
+			{{id}}
+		{{/with}}
 		
 		
 	</script>
@@ -309,7 +322,6 @@
 		    <ul class="portfolio-list clearfix">
 		        {{#each projects}}
 			        <li class="portfolio-item">
-					{{id}}
 						<div class="portfolio-content">
 			    <figure class="portfolio-cover" title="{{this.name}}" data-project-id="{{this.id}}">
 			        {{#if this.covers.[404]}}
