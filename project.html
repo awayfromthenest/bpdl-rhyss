@@ -164,7 +164,15 @@
 							setProjectTemplate(); 
 	        });
 	    };
-		
+			
+			function parseProject () {
+				var projectData = JSON.parse(sessionStorage.getItem('behanceProject')),
+            getTemplate = $('#project-template').html(),
+            template    = Handlebars.compile(getTemplate),
+            result      = template(projectData);
+						// $('#project').show;	
+						$('#project').html(result);
+			};
 	
 	
 			$('#portfolio').on('click', '.portfolio-cover', function() {
@@ -172,21 +180,26 @@
 			        projectID = $this.data('project-id'),
 			        beProjectContentAPI = 'http://www.behance.net/v2/projects/'+ projectID +'?callback=?&api_key=' + apiKey,
 			        keyName = 'behanceProjectImages-' + projectID;
-							projectName = $this.data('project-name');
-							// alert(projectName);
+					var projectName = $this.data('project-name');
 			    		function showGallery(dataSource) {
 							    $this.magnificPopup({
-							        items: 
-							{	src:beProjectContentAPI },
-							        gallery: {
+							        items: [
+   												{
+   													src: $('<div id="project">Dynamically created element</div>'),
+   													type: 'ajax',
+   												},
+   												{
+   													src: beProjectContentAPI,
+   													type: 'iframe',
+   												},
+   											],
+							        	gallery: {
 							            enabled: true
-							        },
-							        type: 'iframe',
-							        mainClass: 'animated',
-							        removalDelay: 350
+							        	},
+							        	mainClass: 'animated',
+							        	removalDelay: 350
 							    }).magnificPopup('open');
-							$('#project').show();
-							document.getElementById("#project").innerHTML = srcItems.projects[id].name + "SUCCESS";
+							// $('#project').show();
 							};
 							// function showGallery(dataSource) {  
 			    		// 			    									    $this.magnificPopup({
@@ -268,6 +281,8 @@
 
 <!-- ******************************************* END HEADER ****************************************************** -->
 
+
+
 <div id="project">
 	<script id="project-template" type="text/x-handlebars-template">
 		
@@ -307,6 +322,7 @@
 		
 	</script>
 </div>
+
 
 <!-- *************************************** PORTFOLIO ********************************************************** -->
 <div class="section portfolio" id="portfolioanchor">
